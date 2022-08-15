@@ -21,3 +21,69 @@ const allWagesFor = function () {
     return payable
 }
 
+function createEmployeeRecord (line){
+    return { firstName: line[0],
+        familyName: line[1], 
+        title: line[2],
+        payPerHour: line[3],
+        timeInEvents: [],
+        timeOutEvents: []
+    }
+}
+function createEmployeeRecords (employeeInfo) {
+    return employeeInfo.map(function(line){
+        return createEmployeeRecord(line)
+})}
+
+ function createTimeInEvent ( workHours){
+    let [date, hour] = workHours.split(' ')
+
+    this.timeInEvents.push({
+        type: "TimeIn",
+        hour: parseInt(hour, 10),
+        date,
+    })
+
+    return this
+}
+
+ function createTimeOutEvent ( workHours){
+    let [date, hour] = workHours.split(' ')
+
+    this.timeOutEvents.push({
+        type: "TimeOut",
+        hour: parseInt(hour, 10),
+        date,
+    })
+
+    return this
+}
+
+function hoursWorkedOnDate ( workDate){
+    let inEvent = this.timeInEvents.find(function(e){
+        return e.date === workDate
+    })
+
+    let outEvent = this.timeOutEvents.find(function(e){
+        return e.date === workDate
+    })
+     let sumEvent =  outEvent.hour - inEvent.hour   
+    return sumEvent / 100
+}
+
+function wagesEarnedOnDate ( dateWorked){
+    let grossPay = hoursWorkedOnDate.call( this ,dateWorked)
+        * this.payPerHour
+    return parseFloat(grossPay.toString())
+}
+
+
+
+function calculatePayroll (arrayOfworkerInfo){
+    return arrayOfworkerInfo.reduce(function(note, info){
+        return note + allWagesFor.apply(info)
+    }, 0)
+}
+function findEmployeeByFirstName (srcArray , firstName){
+    return srcArray.find( line => line.firstName === firstName)
+}
